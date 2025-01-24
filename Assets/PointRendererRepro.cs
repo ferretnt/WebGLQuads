@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 using Unity.Mathematics;
 
 [StructLayout(LayoutKind.Explicit, Pack = 1)]
-public struct CloudVertex
+public struct CloudVertexRepro
 {
     [FieldOffset(0)]
     public ushort rgb565;
@@ -59,9 +59,9 @@ public struct CloudVertex
         }
     }
 
-    public static CloudVertex FromData(int3 posZeroTo65535, byte r, byte g, byte b)
+    public static CloudVertexRepro FromData(int3 posZeroTo65535, byte r, byte g, byte b)
     {
-        return new CloudVertex()
+        return new CloudVertexRepro()
         {
             x = (ushort)posZeroTo65535.x,
             y = (ushort)posZeroTo65535.y,
@@ -72,7 +72,7 @@ public struct CloudVertex
 }
 
 
-public class PointRenderer : MonoBehaviour
+public class PointRendererRepro : MonoBehaviour
 {
     public GraphicsBuffer pointBuffer;
 
@@ -89,7 +89,7 @@ public class PointRenderer : MonoBehaviour
 
 
     const float Radius = 5.0f;
-    const int PointCount = 25600000;
+    const int PointCount = 2560000;
     const float pointSize = 0.01f;
 
 
@@ -103,7 +103,7 @@ public class PointRenderer : MonoBehaviour
 
         if (!StaticsCreated)
         {
-            s_Material = new Material(Shader.Find("Unlit/PointCloud"));
+            s_Material = new Material(Shader.Find("Unlit/PointCloudRepro"));
         }
 
         const float ChunkSpaceZeroTo65535ToLocalMeters = Radius / 65535.0f;
@@ -114,9 +114,9 @@ public class PointRenderer : MonoBehaviour
     {
         SetupRendererConstants();
 
-        pointBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, PointCount, UnsafeUtility.SizeOf<CloudVertex>());
+        pointBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, PointCount, UnsafeUtility.SizeOf<CloudVertexRepro>());
 
-        NativeArray<CloudVertex> pointArray = new NativeArray<CloudVertex>(PointCount, Allocator.Persistent);  
+        NativeArray<CloudVertexRepro> pointArray = new NativeArray<CloudVertexRepro>(PointCount, Allocator.Persistent);  
         for (int i = 0; i < pointArray.Length; i++)
         {
             // float3 pos = UnityEngine.Random.insideUnitSphere * 65535;
@@ -127,7 +127,7 @@ public class PointRenderer : MonoBehaviour
             byte g = (byte)UnityEngine.Random.Range(0, 255);
             byte b = (byte)UnityEngine.Random.Range(0, 255);
 
-            CloudVertex thisPoint = CloudVertex.FromData(posQuantized, r, g, b);  
+            CloudVertexRepro thisPoint = CloudVertexRepro.FromData(posQuantized, r, g, b);  
 
             pointArray[i] = thisPoint;
         }

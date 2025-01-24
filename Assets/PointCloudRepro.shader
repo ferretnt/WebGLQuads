@@ -1,5 +1,5 @@
 
-Shader "Unlit/PointCloud"
+Shader "Unlit/PointCloudRepro"
 {
     Properties
     {
