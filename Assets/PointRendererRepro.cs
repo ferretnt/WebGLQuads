@@ -89,12 +89,14 @@ public class PointRendererRepro : MonoBehaviour
 
 
     const float Radius = 5.0f;
-    const int PointCount = 2560000;
+    public int PointCount = 2560000;
     const float pointSize = 0.01f;
 
 
     void SetupRendererConstants()
     {
+        PointCount = UnityEngine.Random.Range(2560000, 4*2560000);
+
         float3 size = Radius * Vector3.one;
 
         bounds = new Bounds(size / 2, size);    
