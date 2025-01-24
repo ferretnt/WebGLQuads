@@ -92,7 +92,8 @@ public class PointRendererRepro : MonoBehaviour
 
     void SetupRendererConstants()
     {
-        PointCount = UnityEngine.Random.Range(2560000, 4*2560000);
+        // PointCount = UnityEngine.Random.Range(2560000, 4*2560000);
+        Debug.Log($"For gameObject {this.gameObject.name}, PointCount = {PointCount}");
 
         float3 size = Radius * Vector3.one;
 
