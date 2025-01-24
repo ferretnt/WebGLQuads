@@ -77,11 +77,8 @@ public class PointRendererRepro : MonoBehaviour
     public GraphicsBuffer pointBuffer;
 
     public Bounds bounds;
-
-    public MaterialPropertyBlock mpb;
-
     public static bool StaticsCreated = false;
-    public static Material s_Material;
+    public static Material m_Material;
     
     public static int s_PositionsId = Shader.PropertyToID("_Positions");
     public static int s_PointSizeId = Shader.PropertyToID("_PointSize");
@@ -101,15 +98,10 @@ public class PointRendererRepro : MonoBehaviour
 
         bounds = new Bounds(size / 2, size);    
 
-        mpb = new MaterialPropertyBlock();
-
-        if (!StaticsCreated)
-        {
-            s_Material = new Material(Shader.Find("Unlit/PointCloudRepro"));
-        }
+        m_Material = new Material(Shader.Find("Unlit/PointCloudRepro"));
 
         const float ChunkSpaceZeroTo65535ToLocalMeters = Radius / 65535.0f;
-        s_Material.SetFloat("_ChunkSpaceZeroTo65535ToLocalMeters", ChunkSpaceZeroTo65535ToLocalMeters);
+        m_Material.SetFloat("_ChunkSpaceZeroTo65535ToLocalMeters", ChunkSpaceZeroTo65535ToLocalMeters);
     }
 
     void Start()
@@ -155,14 +147,14 @@ public class PointRendererRepro : MonoBehaviour
         }
 
         // Render.
-        RenderParams rp = new RenderParams(s_Material);
+        m_Material.SetBuffer(s_PositionsId, pointBuffer);
+        m_Material.SetFloat(s_PointSizeId, pointSize);
+        m_Material.SetMatrix(s_ObjectToWorldId, transform.localToWorldMatrix);
+
+        RenderParams rp = new RenderParams(m_Material);
         rp.camera = null; 
         rp.worldBounds = bounds;
         rp.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
-        rp.matProps = mpb;  
-        mpb.SetBuffer(s_PositionsId, pointBuffer);
-        mpb.SetFloat(s_PointSizeId, pointSize);
-        mpb.SetMatrix(s_ObjectToWorldId, transform.localToWorldMatrix);
 
         Graphics.RenderPrimitives(rp, MeshTopology.Quads, pointBuffer.count * 4);
     }
