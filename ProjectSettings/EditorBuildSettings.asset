@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/WebGpuQuads.unity
     guid: f5baacd8660764c1cb1536ef58eaa2e1
   - enabled: 1
-    path: Assets/ComputeShaderWebGLBug.unity
+    path: Assets/GraphicsBufferBug.unity
     guid: 8fb7890db33aa466aa77c4353c5bc397
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 289c1b55c9541489481df5cc06664110, type: 3}
