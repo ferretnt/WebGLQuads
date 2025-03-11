@@ -39,14 +39,14 @@ public class ComputeShaderWebGLBug : MonoBehaviour
             Debug.Log($"End of frame {i}. Freeing {buffers.Count} buffers");
 
             // Free all buffers. Comment this in and remove the unloadUnusedAssets to expose bug. 
-            // foreach (var buffer in buffers)
-            // {
-            //     buffer.Dispose(); // Have also tried buffer.Release()
-            // }
+            foreach (var buffer in buffers)
+            {
+                buffer.Dispose(); // Have also tried buffer.Release()
+            }
 
             // Alternative path letting Unity and GC handle disposal
-            buffers.Clear();
-            await Resources.UnloadUnusedAssets();
+            // buffers.Clear();
+            // await Resources.UnloadUnusedAssets();
         }
         Debug.Log("Done");   
     }
